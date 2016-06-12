@@ -1,4 +1,5 @@
-  function statusChangeCallback(response) {
+var userName, userId;
+function statusChangeCallback(response) {
     if (response.status === 'connected') {
 	testAPI();
     } else {
@@ -32,16 +33,31 @@ window.fbAsyncInit = function() {
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-  
+ 
+
 function testAPI() {
     FB.api('/me', function(response){
+	userId = response.id;
+	userName = response.name;
 	FB.api('/me/posts?limit=300', function(postsResponse){
-	    console.log(postsResponse);
-	    latestPost = postsResponse.data[1];
-	    FB.api('/'+latestPost.id+'/likes?summary=true', function(finalResponse) {
-		console.log(finalResponse);
-		document.getElementById('status').innerHTML = 'Thanks, '+response.name+'!';
+	    var posts = postsResponse.data;
+	    var dataToSend = {
+		user_id: userId,
+		user_name: userName,
+		posts: []
+	    };
+	    _.each(posts, function(post){
+		FB.api('/'+post.id+'/likes?summary=true', function(likesResponse){
+		    var postObject = {
+			post_id: post.id,
+			post_content: post.message,
+			post_likes: likesResponse.summary.total_count
+		    };
+		    dataToSend.posts.push(postObject);
+		});
 	    });
+	    console.log(dataToSend);
+	    document.getElementById('status').innerHTML = "Thanks, "+userName+" for sharing your data.";
 	});
     });
 }

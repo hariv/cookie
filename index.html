@@ -5,14 +5,13 @@
 <meta charset="UTF-8">
 </head>
 <body>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
 <script src = "main.js"></script>
-<div id="buttons">
-<fb:login-button scope="user_posts" onlogin="checkLoginState();">
+
+<fb:login-button autologoutlink="true" scope="user_posts" onlogin="checkLoginState();">
 </fb:login-button>
-</div>
 
 <div id="status">
 </div>
-
 </body>
 </html>
