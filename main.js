@@ -38,9 +38,9 @@ function sendToServer(dataToSend) {
     xmlhttp.open("POST", url, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.onreadystatechange = function() {
-	if(http.readyState == 4 && http.status == 200) {
+	if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	    document.getElementById('status').innerHTML = "Thanks, "+userName;
-            console.log(http.responseText);
+            console.log(xmlhttp.responseText);
 	}
     }
     xmlhttp.send(params);
