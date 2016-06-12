@@ -35,6 +35,7 @@ function sendToServer(dataToSend) {
     var xmlhttp = new XMLHttpRequest();
     var url = "/save";
     var params = "data="+dataToSend;
+    console.log(params);
     xmlhttp.open("POST", url, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.onreadystatechange = function() {
@@ -65,9 +66,9 @@ function getData() {
 			post_likes: likesResponse.summary.total_count
 		    };
 		    dataToSend.posts.push(postObject);
+		    document.getElementById('status').innerHTML = "Fetching your data, "+userName;
 		    if(dataToSend.posts.length == posts.length) {
-			document.getElementById('status').innerHTML = "Fetching your data, "+userName;
-			sendToServer(dataToSend);
+			sendToServer(JSON.stringify(dataToSend));
 		    }
 		});
 	    });
