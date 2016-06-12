@@ -57,7 +57,6 @@ function getData() {
 		user_name: userName,
 		posts: []
 	    };
-	    console.log(posts.length);
 	    _.each(posts, function(post){
 		FB.api('/'+post.id+'/likes?summary=true', function(likesResponse){
 		    var postObject = {
