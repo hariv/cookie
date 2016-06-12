@@ -20,10 +20,7 @@ window.fbAsyncInit = function() {
 	cookie     : true, 
 	xfbml      : true,  
 	version    : 'v2.6'
-    });
-  
-    checkLoginState();
-  
+    });  
 };
  
 (function(d, s, id) {
@@ -34,8 +31,22 @@ window.fbAsyncInit = function() {
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
  
+function sendToServer(dataToSend) {
+    var xmlhttp = new XMLHttpRequest();
+    var url = "/save";
+    var params = "data="+dataToSend;
+    xmlhttp.open("POST", url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.onreadystatechange = function() {
+	if(http.readyState == 4 && http.status == 200) {
+	    document.getElementById('status').innerHTML = "Thanks, "+userName;
+            console.log(http.responseText);
+	}
+    }
+    xmlhttp.send(params);
+}
 
-function testAPI() {
+function getData() {
     FB.api('/me', function(response){
 	userId = response.id;
 	userName = response.name;
@@ -46,6 +57,7 @@ function testAPI() {
 		user_name: userName,
 		posts: []
 	    };
+	    console.log(posts.length);
 	    _.each(posts, function(post){
 		FB.api('/'+post.id+'/likes?summary=true', function(likesResponse){
 		    var postObject = {
@@ -54,10 +66,12 @@ function testAPI() {
 			post_likes: likesResponse.summary.total_count
 		    };
 		    dataToSend.posts.push(postObject);
+		    if(dataToSend.posts.length == posts.length) {
+			document.getElementById('status').innerHTML = "Fetching your data, "+userName;
+			sendToServer(dataToSend);
+		    }
 		});
 	    });
-	    console.log(dataToSend);
-	    document.getElementById('status').innerHTML = "Thanks, "+userName+" for sharing your data.";
 	});
     });
 }
