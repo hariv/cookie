@@ -1,7 +1,7 @@
 var userName, userId;
 function statusChangeCallback(response) {
     if (response.status === 'connected') {
-	testAPI();
+	getData();
     } else {
 	document.getElementById('status').innerHTML = 'Please log ' +
 	    'into Facebook.';
