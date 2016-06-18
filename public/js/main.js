@@ -34,11 +34,13 @@ window.fbAsyncInit = function() {
 function sendToServer(dataToSend) {
     var xmlhttp = new XMLHttpRequest();
     var url = "/save";
-    var params = "data="+dataToSend;
-    console.log(params);
-    console.log("length :"+dataToSend.length);
+    console.log(dataToSend.posts.length);
+    var params = {
+	data: dataToSend
+    };
+    params = JSON.stringify(params);
     xmlhttp.open("POST", url, true);
-    // xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.setRequestHeader("Content-type", "application/json;charset=UTF-8");
     xmlhttp.onreadystatechange = function() {
 	if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	    document.getElementById('status').innerHTML = "Thanks, "+userName;
@@ -69,7 +71,7 @@ function getData() {
 		    dataToSend.posts.push(postObject);
 		    document.getElementById('status').innerHTML = "Fetching your data, "+userName;
 		    if(dataToSend.posts.length == posts.length) {
-			sendToServer(JSON.stringify(dataToSend));
+			sendToServer(dataToSend);
 		    }
 		});
 	    });

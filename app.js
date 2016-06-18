@@ -1,5 +1,3 @@
-
-
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -24,26 +22,19 @@ swig.setDefaults({ cache: false });
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'swig');
 
-// app.use(favicon(__dirname + '/public/img/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }));
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 app.post('/save', function(req,res) {
-    // console.log(JSON.stringify(req.body));   
-console.log("data incoming");
-    var data= req.body.data;
-
-
-    console.log(data.length);
-    // data = JSON.parse(data);
-    console.log(data['userid']);
-
+    var userId = req.body.data.userid;
+    var userName = req.body.data['user_name'];
+    var posts = req.body.data.posts;
+    console.log(posts.length);
     res.status(200).json({'success':true});
 });
 app.use('/', routes);
