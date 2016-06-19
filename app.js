@@ -30,7 +30,9 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/cookie');
+mongoose.connect('mongodb://localhost:27017/cookie', function() {
+    console.log("Connected to DB");
+});
 
 var Post = require('./models/Post.js');
 
@@ -45,13 +47,13 @@ app.post('/save', function(req,res) {
     console.log("userName :"+userName);
     // console.log("Posts :"+JSON.stringify(posts));
 
-    var post = new Post();
+    // var post = new Post();
 
-    post.userid=userId;
-    post.username=userName;
-    post.posts = posts;
+    // post.userid=userId;
+    // post.username=userName;
+    // post.posts = posts;
 
-    post.save(function(err) {
+    Post.findOneAndUpdate({userid:userId},{$set:{userid:userId,username:userName,posts:posts}},{upsert:true},function(err, doc) {
         if(err)
         {
             console.log("error saving user and posts");
