@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var querySchema=mongoose.Schema({
-	user_id: String,
-	user_name: String,
+	userid: String,
+	username: String,
 	posts: []
 });
 

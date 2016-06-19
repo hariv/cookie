@@ -29,13 +29,42 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/cookie');
+
+var Post = require('./models/Post.js');
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.post('/save', function(req,res) {
     var userId = req.body.data.userid;
     var userName = req.body.data['user_name'];
     var posts = req.body.data.posts;
     console.log(posts.length);
-    res.status(200).json({'success':true});
+
+    console.log("userName :"+userName);
+    // console.log("Posts :"+JSON.stringify(posts));
+
+    var post = new Post();
+
+    post.userid=userId;
+    post.username=userName;
+    post.posts = posts;
+
+    post.save(function(err) {
+        if(err)
+        {
+            console.log("error saving user and posts");
+            res.status(200).json({'success':false});
+        }
+        else
+        {
+            console.log("Saved");
+            res.status(200).json({'success':true});
+        }
+    });
+
+    
 });
 app.use('/', routes);
 app.use('/users', users);
